@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import Search from "./Components/Search";
 import Weather from "./Components/Weather";
 
 const API_KEY = "9c4437886a2a05db986930452197fd40";
@@ -27,26 +28,28 @@ export default function App() {
   }
   useEffect(() => {
     fetchWeatherData("Dhaka");
-    console.log("data is",weatherData);
   }, []);
 
-if(!loaded){
-  return(
-    <View style={styles.container}>
-      <ActivityIndicator color='#999999' size={45} />
-    </View>
-  )
-}
-else if(weatherData == null){
-  return(
-<View></View>
-  )
-  
-}
+  if (!loaded) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator color="#999999" size={45} />
+      </View>
+    );
+  } else if (weatherData == null) {
+    return (
+      <View style={styles.container}>
+        <Search fetchWeatherData={fetchWeatherData} />
+        <Text style={styles.errorText}>
+          City Not Found!Please enter a valid city
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-     <Weather weatherData={weatherData} />
+      <Weather weatherData={weatherData} fetchWeatherData={fetchWeatherData} />
     </View>
   );
 }
@@ -57,5 +60,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  errorText: {
+    margin: 20,
+    fontSize: 22,
+    color: "red",
   },
 });
